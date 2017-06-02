@@ -1,6 +1,12 @@
 include $(BASE)/common.mk
 
-OBJS :=
+OBJS := event.o connection.o server.o logger.o
+
+ifeq ($(HAVE_AXTLS),y)
+OBJS += connection-axtls.o
+endif
+
+CFLAGS += -g
 
 ifeq ($(DYNAMIC_LIB),y)
 CXXLAGS += -fpic -fPIC
@@ -10,6 +16,16 @@ EXT := .a
 endif
 
 ifeq ($(HOST),linux)
+OBJS += host-linux/event-manager.o host-linux/server-ipv4-unix-socket.o \
+	host-linux/connection-unix-socket.o host-linux/address-socket.o \
+	host-linux/address-ipv4.o host-linux/client-ipv4-unix-socket.o \
+	host-linux/timer.o
+
+ifeq ($(HAVE_AXTLS),y)
+OBJS += host-linux/connection-unix-socket-axtls.o \
+	host-linux/server-ipv4-unix-socket-axtls.o \
+	host-linux/ssl-object.o
+endif
 endif
 
 ifeq ($(HOST),esp8266)
