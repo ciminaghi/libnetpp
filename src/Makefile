@@ -29,6 +29,7 @@ endif
 endif
 
 ifeq ($(HOST),esp8266)
+OBJS += host-esp8266/timer.o
 endif
 
 ifeq ($(HAVE_LWIP),y)
