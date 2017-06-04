@@ -6,11 +6,9 @@
 
 // logger: logger class implementation
 
+#include "netpp.h"
 #include "logger.h"
 #include "timer.h"
-#ifdef HOST_linux
-#include <unistd.h>
-#endif
 
 using namespace std;
 

@@ -10,6 +10,7 @@
 
 #include "logger.h"
 #include "event.h"
+#include "host/netpp.h"
 
 namespace netpp {
 
