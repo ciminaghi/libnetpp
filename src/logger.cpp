@@ -6,6 +6,7 @@
 
 // logger: logger class implementation
 
+#include <cstdio>
 #include "netpp.h"
 #include "logger.h"
 #include "timer.h"
