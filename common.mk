@@ -13,6 +13,7 @@ AR = $(CROSS_COMPILE)ar
 OBJCOPY = $(CROSS_COMPILE)objcopy
 STRIP = $(CROSS_COMPILE)strip
 INSTALL ?= /usr/bin/install
+UCLIBC++_INSTALL_DIR=$(BASE)/uClibc++-install
 DEBUG ?= n
 ESPTOOL ?= /home/develop/yun/esp8266/esp-open-sdk/esptool/esptool.py
 

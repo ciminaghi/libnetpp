@@ -13,11 +13,25 @@ arduino_output_zip_name ?= \
 
 export BASE HOST DYNAMIC_LIB SAMPLES_SSID SAMPLES_PASSWORD SDK_BASE
 
-all: subdirs
+all: uClibc++ subdirs
 
 install: all subdirs_install
 
-clean: subdirs_clean
+clean: subdirs_clean uClibc++-clean
+
+include $(BASE)/common.mk
+
+uClibc++:
+	[ -f config.uClibc++.$(HOST) ] && \
+	cp config.uClibc++.$(HOST) uClibc++/.config \
+	|| true
+	make -C uClibc++ oldconfig
+	make -C uClibc++ CROSS=$(CROSS_COMPILE)
+	make -C uClibc++ CROSS=$(CROSS_COMPILE) \
+	DESTDIR=$(UCLIBC++_INSTALL_DIR) install
+
+uClibc++-clean:
+	make -C uClibc++ clean
 
 subdirs: $(SUBDIRS)
 
@@ -49,4 +63,4 @@ tar_compact : clean
 
 
 .PHONY: all subdirs $(SUBDIRS) tar clean $(foreach s,$(SUBDIRS),$(s)_clean) \
-subdirs_all subdirs_clean subdirs_install
+subdirs_all subdirs_clean subdirs_install uClibc++ uClibc++-clean
