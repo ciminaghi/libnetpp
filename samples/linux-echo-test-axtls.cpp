@@ -35,7 +35,6 @@ void echo_server::disconnected(connection *c)
   string ra; r.read(ra);
   log_info << ra << " disconnected" << endl;
   stream_server::disconnected(c);
-  *event_manager::get() << fatal_event::get_instance();
 }
 
 stream_server& echo_server::operator<<(connection *c)
