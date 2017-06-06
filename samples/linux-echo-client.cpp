@@ -29,7 +29,11 @@ namespace netpp {
     virtual void doit(void)
     {
       string s;
-      cin >> s;
+      getline(cin, s);
+      if (cin.fail()) {
+	log_fatal << "cin failure" << endl;
+	::exit(128);
+      }
       log_info << "sending data" << endl;
       *(cl.get_connection()) << s << endl << flush;
     };
