@@ -1,6 +1,6 @@
 include $(BASE)/common.mk
 
-OBJS := event.o connection.o server.o logger.o
+OBJS := event.o connection.o server.o logger.o address.o
 
 ifeq ($(HAVE_AXTLS),y)
 OBJS += connection-axtls.o
