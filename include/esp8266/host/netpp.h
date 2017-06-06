@@ -6,4 +6,11 @@
 
 // esp8266/host/netpp.h: low level compat header file
 
-extern int write(int fd, const char *buf, int size);
+
+#include <stddef.h>
+#include <stdio.h>
+
+#define __cpp_sized_deallocation 0
+
+extern "C" int snprintf(char *str, size_t size, const char *format, ...);
+extern "C" int fileno(FILE *);
