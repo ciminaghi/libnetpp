@@ -51,7 +51,11 @@ namespace netpp {
 
       ssl_read(ssl, &dummy);
     }
-    virtual void close(void) { address a = address::unknown ; }
+    virtual void close(void)
+    {
+      linux_event_manager::get()->del_fd(get_id());
+      ::close(get_id());
+    }
     ~connection_unix_socket_axtls() { close(); };
   };
 
