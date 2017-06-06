@@ -62,9 +62,6 @@ namespace netpp {
 
   stream_server_ipv4_unix_socket_axtls::~stream_server_ipv4_unix_socket_axtls()
   {
-    linux_event_manager *em = linux_event_manager::get();
-    em->del_fd(fd);
-    close(fd);
   }
 
 } // namespace netpp
