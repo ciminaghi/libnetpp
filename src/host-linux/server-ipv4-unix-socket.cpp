@@ -23,6 +23,9 @@ void stream_server_ipv4_unix_socket::create_socket(void)
   fd = socket(AF_INET, SOCK_STREAM, 0);
   if (fd < 0)
     fatal("socket error", 127);
+  int enable = 1;
+  if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0)
+    fatal("setsockopt(SO_REUSEADDR) failed", 127);
 }
 
 void stream_server_ipv4_unix_socket::
