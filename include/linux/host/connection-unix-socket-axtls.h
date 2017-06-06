@@ -30,28 +30,45 @@ namespace netpp {
     ~connection_axtls_sb() { ssl_free(ssl); }
   };
 
+  class rx_event_axtls;
+
   class connection_unix_socket_axtls : public connection {
+  private:
+    SSL *ssl;
   public:
     connection_unix_socket_axtls(address &l, address &r, int id,
-				 client_server& _o, SSL *ssl) :
-      connection(l, r, id, _o, new connection_axtls_sb(ssl))
-    {
-      linux_event_manager::get()->add_fd(id, rx_event::get(_o, this));
-    };
+				 client_server& _o, SSL *_ssl);
     connection_unix_socket_axtls(address &l, int _id, client_server& _o,
-				 SSL *ssl):
-      connection(l, address::unknown, _id, _o, new connection_axtls_sb(ssl))
+				 SSL *_ssl);
+    connection_unix_socket_axtls(int _id, client_server& _o, SSL *_ssl);
+    virtual bool handshaking_ok(void)
     {
-      linux_event_manager::get()->add_fd(_id, rx_event::get(_o, this));
-    };
-    connection_unix_socket_axtls(int _id, client_server& _o, SSL *ssl):
-      connection(address_ipv4::any, address::unknown, _id, _o,
-		 new connection_axtls_sb(ssl))
+      return ssl_handshake_status(ssl) == SSL_OK;
+    }
+    virtual void dummy_read(void)
     {
-      linux_event_manager::get()->add_fd(_id, rx_event::get(_o, this));
-    };
-    virtual void close(void) { }
+      uint8_t *dummy;
+
+      ssl_read(ssl, &dummy);
+    }
+    virtual void close(void) { address a = address::unknown ; }
     ~connection_unix_socket_axtls() { close(); };
+  };
+
+  class rx_event_axtls : public rx_event {
+  private:
+    connection_unix_socket_axtls *c;
+  protected:
+    rx_event_axtls(client_server& r, connection_unix_socket_axtls *_c):
+      rx_event(r, _c), c(_c)
+    {
+    }
+  public:
+    static event *get(client_server& r, connection_unix_socket_axtls *c)
+    {
+      return new rx_event_axtls(r, c);
+    }
+    virtual void doit(void);
   };
 
   class secure_passive_connection_event_unix_socket :
