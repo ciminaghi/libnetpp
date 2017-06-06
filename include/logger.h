@@ -25,7 +25,7 @@ namespace netpp {
     char _buffer[80];
     string *prefix;
     virtual int_type overflow(int_type c);
-    virtual int_type sync(void);
+    virtual int sync(void);
     int_type _flush(void);
   public:
     logger_sb(const char *p, size_t bufsize = 256);

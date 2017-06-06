@@ -14,6 +14,8 @@ OBJCOPY = $(CROSS_COMPILE)objcopy
 STRIP = $(CROSS_COMPILE)strip
 INSTALL ?= /usr/bin/install
 UCLIBC++_INSTALL_DIR=$(BASE)/uClibc++-install
+UCLIBC++_HEADERS=$(UCLIBC++_INSTALL_DIR)/usr/uClibc++/include
+UCLIBC++_LIB=$(UCLIBC++_INSTALL_DIR)/usr/uClibc++/lib
 DEBUG ?= n
 ESPTOOL ?= /home/develop/yun/esp8266/esp-open-sdk/esptool/esptool.py
 
@@ -38,8 +40,9 @@ CXXFLAGS += -std=c++11 -O2 -Wall -Werror -DHOST_$(HOST) -I$(BASE)/include/ -I. \
 	-DBASEDIR=\"$(BASE)\" \
 	-DBINDIR=\"$(bindir)/\" -DLIBDIR=\"$(libdir)/\" \
 	-DDATADIR=\"$(datadir)/\" -DCONFDIR=\"$(confdir)/\" \
-	-I$(BASE)/include/$(HOST)
-LDFLAGS +=  $(LIBNET) -lstdc++
+	-I$(BASE)/include/$(HOST) -nostdinc++ -I$(UCLIBC++_HEADERS) \
+	-fno-exceptions
+LDFLAGS +=  $(LIBNET) -L$(UCLIBC++_LIB) -luClibc++
 
 ifeq ($(DEBUG),y)
 CXXFLAGS += -g -DDEBUG

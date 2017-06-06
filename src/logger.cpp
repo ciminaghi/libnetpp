@@ -42,7 +42,7 @@ namespace netpp {
     return c;
   }
 
-  ostream::int_type logger_sb::sync(void)
+  int logger_sb::sync(void)
   {
     cout << endl << "[ " << *prefix << ": " << timer::get()->curr_time()
 	 << "] " << flush;
